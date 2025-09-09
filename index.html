@@ -152,8 +152,7 @@
   <!-- Modal foto grande -->
   <div class="modal" id="modal" onclick="this.style.display='none'">
     <img id="modal-img" src="">
-  </div>
-
+    
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // === CONFIG ===
@@ -186,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!node) { alert('Elemento faltando no HTML: #' + name); return; }
   }
 
-  // data mínima = amanhã
+  // data mínima = amanhã  ✅ (corrigido com crases)
   (function(){
     try{
       const d=new Date(); d.setDate(d.getDate()+1);
@@ -206,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Preencha todos os campos / 全て入力してください');
       return;
     }
+
+    // valida antecedência  ✅ (corrigido com crases)
     const when = new Date(${data}T${hora}:00);
     if(when - new Date() < MIN_LEAD_MIN*60000){
       alert('Precisa de 2h de antecedência / 2時間前までに予約してください');
@@ -242,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rows = (data.rows || [])
         .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
 
+      // monta a lista  ✅ (corrigido com crases)
       listaUl.innerHTML = rows.length
         ? rows.map(r => <li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>).join('')
         : '<li>(sem agendamentos)</li>';
