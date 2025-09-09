@@ -155,27 +155,52 @@
   </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
   // === CONFIG ===
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzLPCBEiUo7WTF2jwC0aDQNpBkuJQevwOtjfhRYpTLZSWAye2-5XBsGUEr2mC6mcmg2/exec";
   const PIN = "0911";
   const MIN_LEAD_MIN = 120;
 
+  // --- pega elementos (com checagem) ---
+  const el = id => document.getElementById(id);
+  const okBox     = el('ok');
+  const nomeInput = el('nome');
+  const servSel   = el('servico');
+  const dataInput = el('data');
+  const horaInput = el('hora');
+  const btnAg     = el('btn');
+  const pinInput  = el('pin');
+  const btnAdmin  = el('btn-admin');
+  const areaAdmin = el('area-admin');
+  const listaUl   = el('lista');
+  const btnClear  = el('btn-clear');
+
+  // se algo essencial não existir, avisa e sai
+  const required = [
+    ['ok', okBox], ['nome', nomeInput], ['servico', servSel],
+    ['data', dataInput], ['hora', horaInput], ['btn', btnAg],
+    ['pin', pinInput], ['btn-admin', btnAdmin], ['area-admin', areaAdmin],
+    ['lista', listaUl], ['btn-clear', btnClear]
+  ];
+  for (const [name, node] of required) {
+    if (!node) { alert('Elemento faltando no HTML: #' + name); return; }
+  }
+
   // data mínima = amanhã
   (function(){
-    const d=new Date(); d.setDate(d.getDate()+1);
-    const p=n=>String(n).padStart(2,'0');
-    document.getElementById('data').value =
-      ${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())};
+    try{
+      const d=new Date(); d.setDate(d.getDate()+1);
+      const p=n=>String(n).padStart(2,'0');
+      dataInput.value = ${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())};
+    }catch(_){}
   })();
 
   // -------- AGENDAR (POST) --------
-  document.getElementById('btn').addEventListener('click', async () => {
-    const okBox = document.getElementById('ok');
-
-    const nome = document.getElementById('nome').value.trim();
-    const serv = document.getElementById('servico').value;
-    const data = document.getElementById('data').value;
-    const hora = document.getElementById('hora').value;
+  btnAg.addEventListener('click', async () => {
+    const nome = nomeInput.value.trim();
+    const serv = servSel.value;
+    const data = dataInput.value;
+    const hora = horaInput.value;
 
     if(!nome || !serv || !data || !hora){
       alert('Preencha todos os campos / 全て入力してください');
@@ -188,53 +213,48 @@
     }
 
     try{
-      // no-cors: enviamos e não lemos resposta
       await fetch(WEB_APP_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'no-cors', // enviamos, não lemos resposta
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, servico: serv, data, hora, pin: PIN })
       });
 
       okBox.style.display = 'block';
-      document.getElementById('nome').value = '';
-      document.getElementById('hora').value = '';
+      nomeInput.value = '';
+      horaInput.value = '';
     }catch(e){
       alert('Erro ao enviar. Tente novamente.');
     }
   });
 
   // -------- ADMIN (GET) --------
-  document.getElementById('btn-admin').addEventListener('click', async () => {
-    const pin = document.getElementById('pin').value.trim();
+  btnAdmin.addEventListener('click', async () => {
+    const pin = pinInput.value.trim();
     if(pin !== PIN){ alert('PIN incorreto / PINが違います'); return; }
 
     try{
-      const res  = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
-      if(!res.ok){ throw new Error('HTTP ' + res.status); }
-
-      const data = await res.json();       // Apps Script retorna JSON
+      const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
       if(!data.ok){ alert('Erro ao consultar.'); return; }
-
-      const ul   = document.getElementById('lista');
-      const area = document.getElementById('area-admin');
 
       const rows = (data.rows || [])
         .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
 
-      ul.innerHTML = rows.length
+      listaUl.innerHTML = rows.length
         ? rows.map(r => <li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>).join('')
         : '<li>(sem agendamentos)</li>';
 
-      area.style.display = 'block';
+      areaAdmin.style.display = 'block';
     }catch(e){
       alert('Erro de rede ao consultar.');
     }
   });
 
-  // limpar somente a lista da tela (não apaga planilha)
-  document.getElementById('btn-clear').addEventListener('click', () => {
-    document.getElementById('lista').innerHTML = '<li>(sem agendamentos)</li>';
+  // limpar só a lista da tela (não apaga a planilha)
+  btnClear.addEventListener('click', () => {
+    listaUl.innerHTML = '<li>(sem agendamentos)</li>';
   });
 
   // Modal da galeria (fotos grandes)
@@ -244,7 +264,7 @@
       document.getElementById('modal').style.display='block';
     });
   });
-</script>
+});
 </script>
 </body>
 </html>
