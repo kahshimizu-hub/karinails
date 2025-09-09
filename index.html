@@ -15,6 +15,7 @@
     button { background: #d63384; color: white; border: none; cursor: pointer; }
     button:hover { background: #a61e5c; }
     footer { background: #333; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
+    a { color: #ffd1e6; }
   </style>
 </head>
 <body>
@@ -62,7 +63,7 @@
     </section>
   </main>
   <footer>
-    <p>📷 Instagram: <a href="https://instagram.com/karinails" target="_blank">@karinails</a></p>
+    <p>📷 Instagram: <a href="https://instagram.com/karinails1952" target="_blank">@karinails1952</a></p>
     <p>💬 WhatsApp: <a href="https://wa.me/818057360208" target="_blank">+81 80-5736-0208</a></p>
     <p>&copy; 2025 Karinails</p>
   </footer>
@@ -77,7 +78,7 @@
       const agendamentos = JSON.parse(localStorage.getItem('agendamentos')||'[]');
       agendamentos.push({nome, servico, data, hora});
       localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-      alert('Agendamento salvo!');
+      alert('Agendamento salvo! / 登録しました');
       e.target.reset();
     }
     function entrarAdmin(){
@@ -88,7 +89,7 @@
         const ul = document.getElementById('agendamentos');
         ul.innerHTML = agendamentos.map(a=>`<li>${a.data} ${a.hora} - ${a.nome} (${a.servico})</li>`).join('');
       } else {
-        alert('PIN incorreto');
+        alert('PIN incorreto / PINが違います');
       }
     }
   </script>
