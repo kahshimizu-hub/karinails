@@ -10,6 +10,15 @@
     :root{
       --bg:#fff8f7; --card:#ffffff; --ink:#2d2a2a; --muted:#6f6366;
       --brand:#d63384; --brand-2:#f3c3d7; --ring:rgba(214,51,132,.3); --radius:20px;
+       }
+*{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+    header.hero{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%); padding: 24px 16px;}
+    .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+    .brand{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .brand img{width:110px;height:110px;object-fit:cover;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);border:3px solid #fff}
+    .brand h1{margin:0;font-size:32px}
+    
     body{font-family:sans-serif;background:#fff8f7;margin:0;color:#2d2a2a}
     header{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%);padding:24px;text-align:center}
     header img{width:140px;height:140px;object-fit:cover;border-radius:50%;border:4px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.15)}
