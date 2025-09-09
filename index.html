@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karinails - Agendamento</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fafafa; }
+    header { background: #d63384; color: white; padding: 1rem; text-align: center; }
+    h1 { margin: 0; }
+    main { padding: 1rem; max-width: 600px; margin: auto; }
+    section { margin-bottom: 2rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, button { width: 100%; padding: 0.5rem; margin-top: 0.5rem; }
+    button { background: #d63384; color: white; border: none; cursor: pointer; }
+    button:hover { background: #a61e5c; }
+    footer { background: #333; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Karinails 💅</h1>
+    <p>Agendamento Online</p>
+  </header>
+  <main>
+    <section>
+      <h2>Serviços / サービス</h2>
+      <ul>
+        <li>Esmaltadas em gel / ジェルネイルカラー – ¥4.500</li>
+        <li>Alongamento (inclui esmaltação) / 長さ出し＋ワンカラー – ¥6.500</li>
+        <li>Alongamento + esmaltação + decorações (incluindo pedrarias) / 長さ出し＋デザイン＋ストーン – ¥7.000</li>
+        <li>Manutenção até 28 dias / リペア（28日以内） – ¥4.000</li>
+        <li>Mais de 28 dias / 28日以上は新規料金 – preço de aplicação</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Agende seu horário / ご予約</h2>
+      <form onsubmit="salvarAgendamento(event)">
+        <label>Nome / お名前 <input type="text" id="nome" required /></label>
+        <label>Serviço / サービス
+          <select id="servico">
+            <option value="gel">Esmaltadas em gel</option>
+            <option value="alongamento">Alongamento</option>
+            <option value="decorado">Alongamento + Decoração</option>
+            <option value="manutencao">Manutenção até 28 dias</option>
+            <option value="acima28">Manutenção +28 dias</option>
+          </select>
+        </label>
+        <label>Data / 日付 <input type="date" id="data" required /></label>
+        <label>Hora / 時間 <input type="time" id="hora" required /></label>
+        <button type="submit">Agendar / 予約</button>
+      </form>
+    </section>
+    <section id="admin">
+      <h2>Painel Admin / 管理</h2>
+      <label>PIN: <input type="password" id="pin" /></label>
+      <button onclick="entrarAdmin()">Entrar</button>
+      <div id="lista" style="display:none;">
+        <h3>Agendamentos</h3>
+        <ul id="agendamentos"></ul>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>📷 Instagram: <a href="https://instagram.com/karinails" target="_blank">@karinails</a></p>
+    <p>💬 WhatsApp: <a href="https://wa.me/818057360208" target="_blank">+81 80-5736-0208</a></p>
+    <p>&copy; 2025 Karinails</p>
+  </footer>
+  <script>
+    const PIN = "0911";
+    function salvarAgendamento(e){
+      e.preventDefault();
+      const nome = document.getElementById('nome').value;
+      const servico = document.getElementById('servico').value;
+      const data = document.getElementById('data').value;
+      const hora = document.getElementById('hora').value;
+      const agendamentos = JSON.parse(localStorage.getItem('agendamentos')||'[]');
+      agendamentos.push({nome, servico, data, hora});
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+      alert('Agendamento salvo!');
+      e.target.reset();
+    }
+    function entrarAdmin(){
+      const pin = document.getElementById('pin').value;
+      if(pin===PIN){
+        document.getElementById('lista').style.display='block';
+        const agendamentos = JSON.parse(localStorage.getItem('agendamentos')||'[]');
+        const ul = document.getElementById('agendamentos');
+        ul.innerHTML = agendamentos.map(a=>`<li>${a.data} ${a.hora} - ${a.nome} (${a.servico})</li>`).join('');
+      } else {
+        alert('PIN incorreto');
+      }
+    }
+  </script>
+</body>
+</html>
