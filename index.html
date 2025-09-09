@@ -159,72 +159,67 @@
   const PIN = "0911";
   const MIN_LEAD_MIN = 120;
 
-  // Data padrão: amanhã
-  (function(){
-    const d=new Date(); d.setDate(d.getDate()+1);
-    const p=n=>String(n).padStart(2,'0');
-    document.getElementById('data').value = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
-  })();
+  // ----------------- AGENDAR -----------------
+document.getElementById('btn').addEventListener('click', async ()=>{
+  const okBox = document.getElementById('ok');
 
-  // ===== Enviar AGENDAMENTO para a planilha =====
-  document.getElementById('btn').addEventListener('click', async ()=>{
-    const nome = document.getElementById('nome').value.trim();
-    const serv = document.getElementById('servico').value;
-    const data = document.getElementById('data').value;
-    const hora = document.getElementById('hora').value;
+  const nome = document.getElementById('nome').value.trim();
+  const serv = document.getElementById('servico').value;
+  const data = document.getElementById('data').value;
+  const hora = document.getElementById('hora').value;
 
-    if(!nome||!serv||!data||!hora){
-      alert('Preencha todos os campos / 全て入力してください'); return;
-    }
-    const when = new Date(`${data}T${hora}:00`);
-    if(when - new Date() < MIN_LEAD_MIN*60000){
-      alert('Precisa de 2h de antecedência / 2時間前までに予約してください'); return;
-    }
+  if(!nome || !serv || !data || !hora){
+    alert('Preencha todos os campos / 全て入力してください');
+    return;
+  }
 
-    try {
-      await fetch(WEB_APP_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // não precisamos ler a resposta
-        body: JSON.stringify({ nome, servico: serv, data, hora, pin: PIN })
-      });
-      const ok = document.getElementById('ok');
-      ok.style.display = 'block';
-      setTimeout(()=> ok.style.display='none', 2500);
-      // limpa campos
-      document.getElementById('nome').value='';
-      document.getElementById('hora').value='';
-    } catch (e) {
-      alert('Erro ao enviar. Tente novamente.');
-    }
-  });
+  const when = new Date(data+'T'+hora+':00');
+  if(when - new Date() < MIN_LEAD_MIN*60000){
+    alert('Precisa de 2h de antecedência / 2時間前までに予約してください');
+    return;
+  }
 
-  // ===== ADMIN: listar agendamentos da planilha =====
-  document.getElementById('btn-admin').addEventListener('click', async ()=>{
-    const pin = document.getElementById('pin').value.trim();
-    if (pin !== PIN) { alert('PIN incorreto / PINが違います'); return; }
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, servico: serv, data, hora, pin: PIN })
+    });
+    okBox.style.display = 'block';
+    document.getElementById('nome').value = '';
+    document.getElementById('hora').value = '';
+  } catch(e){
+    alert('Erro ao enviar. Tente novamente.');
+  }
+});
 
-    try {
-      const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
-      const data = await res.json();
-      if (!data.ok) { alert('Erro ao consultar.'); return; }
+// ----------------- ADMIN -----------------
+document.getElementById('btn-admin').addEventListener('click', async ()=>{
+  const pin = document.getElementById('pin').value.trim();
+  if (pin !== PIN) { alert('PIN incorreto / PINが違います'); return; }
 
-      const ul   = document.getElementById('lista');
-      const area = document.getElementById('area-admin');
+  try {
+    const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
+    const data = await res.json();
+    if (!data.ok) { alert('Erro ao consultar.'); return; }
 
-      const rows = (data.rows || [])
-        .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+    const ul   = document.getElementById('lista');
+    const area = document.getElementById('area-admin');
 
-      ul.innerHTML = rows.length
-        ? rows.map(r=>`<li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>`).join('')
-        : '<li>(sem agendamentos)</li>';
+    const rows = (data.rows || [])
+      .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
 
-      area.style.display = 'block';
-    } catch (e) {
-      alert('Erro de rede ao consultar.');
-    }
-  });
+    ul.innerHTML = rows.length
+      ? rows.map(r=>`<li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>`).join('')
+      : '<li>(sem agendamentos)</li>';
 
+    area.style.display = 'block';
+  } catch (e) {
+    alert('Erro de rede ao consultar.');
+  }
+});
+</script>
   // Botão "Limpar todos" agora só limpa a lista da tela (não apaga da planilha)
   document.getElementById('btn-clear').addEventListener('click', ()=>{
     document.getElementById('lista').innerHTML='<li>(sem agendamentos)</li>';
