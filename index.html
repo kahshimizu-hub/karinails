@@ -3,193 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karinails | Agendamento</title>
-  <meta name="description" content="Karinails — agende seu horário online. ヒロシマのネイルサロン、オンライン予約。" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>💅</text></svg>">
+  <title>Karinails.design | Agendamento</title>
   <style>
-    :root{
-      --bg:#fff8f7; --card:#ffffff; --ink:#2d2a2a; --muted:#6f6366;
-      --brand:#d63384; --brand-2:#f3c3d7; --ring:rgba(214,51,132,.3); --radius:20px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
-    header.hero{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%); padding: 24px 16px;}
-    .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
-    .brand{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-    .brand img{width:110px;height:110px;object-fit:cover;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);border:3px solid #fff}
-    .brand h1{margin:0;font-size:32px}
-    .badge{display:inline-block;background:#f7eaf1;border:1px solid #f0cfe0;color:#7a304e;border-radius:999px;padding:4px 10px;font-size:12px;margin-left:6px}
-    .muted{color:var(--muted);}
-    main{padding:28px 0}
-    h2{margin:8px 0 12px}
-    .grid{display:grid;gap:16px}
-    @media(min-width:720px){.grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)}}
-    .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.05);border:1px solid #f3e6ea}
-    .service{display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .service h3{margin:0;font-size:16px}
-    .yen{font-weight:800;color:var(--brand)}
-    label{display:block;margin-top:10px;font-size:14px}
-    input,select,button{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e9d6dd;background:#fff;outline:none;font-size:16px}
-    input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--ring)}
-    button{background:var(--brand);color:white;border:none;font-weight:700;cursor:pointer}
-    button:hover{filter:brightness(.95)}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row>div{flex:1 1 220px}
-    .admin{margin-top:8px;border-top:1px dashed #e6cbd7;padding-top:12px}
-    footer{background:#20181b;color:#fff;margin-top:28px}
-    footer .wrap{padding:22px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    footer a{color:#ffd1e6;text-decoration:none}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#38262d}
-    .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    @media(min-width:920px){.gallery{grid-template-columns:repeat(3,1fr)}}
-    .gallery img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;border:2px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-    .success{background:#e6ffef;border:1px solid #b7f3c6;color:#1d6d3a;padding:12px;border-radius:12px;margin-top:10px;display:none}
+    body{font-family:sans-serif;background:#fff8f7;margin:0;color:#2d2a2a}
+    header{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%);padding:24px;text-align:center}
+    header img{width:140px;height:140px;object-fit:cover;border-radius:50%;border:4px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+    .wrap{max-width:1000px;margin:auto;padding:20px}
+    .grid{display:grid;gap:20px}
+    @media(min-width:800px){.grid{grid-template-columns:1fr 1fr 1fr}}
+    .card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+    .service{display:flex;justify-content:space-between;margin-bottom:18px} /* espaço maior */
+    .service h3{margin:0;font-size:15px}
+    .yen{color:#d63384;font-weight:bold}
+    .gallery{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+    @media(min-width:800px){.gallery{grid-template-columns:repeat(3,1fr)}}
+    .gallery img{width:100%;border-radius:12px;object-fit:cover;aspect-ratio:1/1;cursor:pointer}
+    footer{background:#20181b;color:#fff;padding:16px;text-align:center;margin-top:20px}
+    footer a{color:#ffd1e6;text-decoration:none;margin:0 8px}
+    /* Modal */
+    .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85)}
+    .modal img{max-width:90%;max-height:90%;margin:auto;display:block;position:absolute;top:0;bottom:0;left:0;right:0}
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="wrap brand">
-      <img src="assets/hero.jpg" alt="Karinails — Karina" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'110\' height=\'110\'><rect width=\'100%\' height=\'100%\' fill=\'%23ffe9f3\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'14\' fill=\'%237a304e\'>Foto da Karina</text></svg>'">
-      <div>
-        <h1>Karinails <span class="badge">Hiroshima</span></h1>
-        <div class="muted">Agendamento online • オンライン予約</div>
-        <div class="muted">Gel • 長さ出し • デザイン</div>
-      </div>
-    </div>
+  <header>
+    <img src="assets/hero.jpg" alt="Karina - Nail designer">
+    <h1>Karinails.design Hiroshima</h1>
+    <p>Agendamento online • オンライン予約<br/>Gel • 長さ出し • デザイン</p>
   </header>
 
   <main class="wrap">
-    <section class="grid cols-3">
+    <section class="grid">
       <div class="card">
         <h2>Serviços / サービス</h2>
         <div class="service"><h3>Esmaltadas em gel / ジェルネイルカラー</h3><div class="yen">¥4,500</div></div>
         <div class="service"><h3>Alongamento + 1 cor / 長さ出し＋ワンカラー</h3><div class="yen">¥6,500</div></div>
         <div class="service"><h3>Alongamento + decorações / 長さ出し＋デザイン＋ストーン</h3><div class="yen">¥7,000</div></div>
         <div class="service"><h3>Manutenção (≤28 dias) / リペア（28日以内）</h3><div class="yen">¥4,000</div></div>
-        <div class="service"><h3>28+ dias / 28日以上は新規料金</h3><div class="yen">¥—</div></div>
+        <div class="service"><h3>Acima de 28 dias / 28日以上</h3><div class="yen">Preço de aplicação</div></div>
       </div>
 
       <div class="card">
         <h2>Agendar / ご予約</h2>
-        <div id="ok" class="success">Agendamento salvo! / 予約完了しました。</div>
-        <label>Nome / お名前
-          <input id="nome" placeholder="Ex.: Karina / カリナ" required />
-        </label>
+        <label>Nome / お名前 <input id="nome" style="width:100%"></label>
         <label>Serviço / サービス
-          <select id="servico">
-            <option value="Esmaltadas em gel / ジェルネイルカラー">Esmaltadas em gel / ジェルネイルカラー</option>
-            <option value="Alongamento + 1 cor / 長さ出し＋ワンカラー">Alongamento + 1 cor / 長さ出し＋ワンカラー</option>
-            <option value="Alongamento + decorações / 長さ出し＋デザイン＋ストーン">Alongamento + decorações / 長さ出し＋デザイン＋ストーン</option>
-            <option value="Manutenção (≤28d) / リペア（28日以内）">Manutenção (≤28d) / リペア（28日以内）</option>
-            <option value="28+ dias / 28日以上は新規料金">28+ dias / 28日以上は新規料金</option>
+          <select id="servico" style="width:100%">
+            <option>Esmaltadas em gel / ジェルネイルカラー</option>
+            <option>Alongamento + 1 cor / 長さ出し＋ワンカラー</option>
+            <option>Alongamento + decorações / 長さ出し＋デザイン＋ストーン</option>
+            <option>Manutenção (≤28 dias) / リペア（28日以内）</option>
+            <option>Acima de 28 dias / 28日以上</option>
           </select>
         </label>
-        <div class="row">
-          <div>
-            <label>Data / 日付
-              <input type="date" id="data" required />
-            </label>
-          </div>
-          <div>
-            <label>Hora / 時間
-              <input type="time" id="hora" required />
-            </label>
-          </div>
-        </div>
-        <button id="btn-agendar">Agendar / 予約</button>
-
-        <div class="admin">
-          <details>
-            <summary>🔐 Admin (PIN)</summary>
-            <label>PIN <input type="password" id="pin" placeholder="****" /></label>
-            <button id="btn-admin">Entrar</button>
-            <div id="lista" style="display:none;margin-top:8px">
-              <h3>Agendamentos</h3>
-              <ul id="agendamentos" class="muted"></ul>
-              <button id="btn-clear" style="margin-top:8px;background:#6b7280">Limpar todos / 全削除</button>
-            </div>
-          </details>
-          <div class="muted" style="font-size:12px">Fuso: Asia/Tokyo • データは端末（ブラウザ）に保存されます。</div>
-        </div>
+        <label>Data / 日付 <input type="date" id="data" style="width:100%"></label>
+        <label>Hora / 時間 <input type="time" id="hora" style="width:100%"></label>
+        <button id="btn" style="width:100%;padding:10px;background:#d63384;color:#fff;border:none;border-radius:10px;font-weight:700">Agendar / 予約</button>
       </div>
 
       <div class="card">
         <h2>Galeria / 作品</h2>
         <div class="gallery">
-          <img src="assets/nails-red.jpg" alt="Unhas vermelhas com pedrarias"
-               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'600\'><rect width=\'100%\' height=\'100%\' fill=\'%23ffe9f3\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%237a304e\'>Foto nails-red.jpg</text></svg>'">
-          <img src="assets/nails-blue.jpg" alt="Unhas azul e rosa com strass"
-               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'600\'><rect width=\'100%\' height=\'100%\' fill=\'%23ffe9f3\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%237a304e\'>Foto nails-blue.jpg</text></svg>'">
-          <img src="assets/hero.jpg" alt="Karina — Nail designer (retrato)"
-               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'600\'><rect width=\'100%\' height=\'100%\' fill=\'%23ffe9f3\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%237a304e\'>Foto hero.jpg</text></svg>'">
+          <img src="assets/nails-red.jpg" alt="Unhas vermelhas">
+          <img src="assets/nails-blue.jpg" alt="Unhas azul/rosa">
+          <img src="assets/hero.jpg" alt="Karina">
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap" style="display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap">
-      <div>© 2025 Karinails • Hiroshima</div>
-      <div class="pill">📷 <a href="https://instagram.com/karinails1952" target="_blank" style="margin-left:6px">@karinails1952</a></div>
-      <div class="pill">💬 <a href="https://wa.me/818057360208" target="_blank" style="margin-left:6px">+81 80-5736-0208</a></div>
-    </div>
+    <p>© 2025 Karinails.design • Hiroshima</p>
+    <p>@ do Instagram: <a href="https://instagram.com/karinails.design">@karinails.design</a> | 
+    <a href="https://wa.me/818057360208">WhatsApp</a></p>
   </footer>
 
-  <script>
-    const PIN = "0911";
-    const MIN_LEAD_MIN = 120;
-    const nome = document.getElementById('nome');
-    const servico = document.getElementById('servico');
-    const dataEl = document.getElementById('data');
-    const horaEl = document.getElementById('hora');
-    const ok = document.getElementById('ok');
+  <div class="modal" id="modal" onclick="this.style.display='none'">
+    <img id="modal-img" src="">
+  </div>
 
-    (function setDefaultDate(){
-      const d=new Date(); d.setDate(d.getDate()+1);
-      const pad=n=>String(n).padStart(2,'0');
-      dataEl.value = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-    })();
-
-    function salvarAgendamento(){
-      const n = nome.value.trim();
-      const s = servico.value;
-      const d = dataEl.value;
-      const h = horaEl.value;
-      if(!n||!s||!d||!h){ alert('Preencha todos os campos / 全て入力してください'); return; }
-      const when = new Date(d+'T'+h+':00');
-      const now = new Date();
-      if((when - now) < MIN_LEAD_MIN*60000){
-        alert('Precisa de 2h de antecedência / 2時間前までに予約してください'); return;
-      }
-      const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]');
-      rows.push({nome:n, servico:s, data:d, hora:h, ts:Date.now()});
-      localStorage.setItem('agendamentos', JSON.stringify(rows));
-      ok.style.display='block'; setTimeout(()=>{ ok.style.display='none'; }, 2500);
-      nome.value=''; servico.selectedIndex=0;
-    }
-
-    function entrarAdmin(){
-      const pin = document.getElementById('pin').value;
-      if(pin!=="0911"){ alert('PIN incorreto / PINが違います'); return; }
-      const box = document.getElementById('lista');
-      const ul  = document.getElementById('agendamentos');
-      const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]')
-        .sort((a,b)=> (a.data+a.hora).localeCompare(b.data+b.hora));
-      ul.innerHTML = rows.length? rows.map(r=>`<li>${r.data} ${r.hora} — <strong>${r.nome}</strong> <span class="muted">(${r.servico})</span></li>`).join('')
-                             : '<li>Sem agendamentos / 予約なし</li>';
-      box.style.display='block';
-    }
-
-    function limparTodos(){
-      if(confirm('Apagar todos os agendamentos? / 全て削除しますか？')){
-        localStorage.removeItem('agendamentos');
-        document.getElementById('agendamentos').innerHTML = '<li>Sem agendamentos / 予約なし</li>';
-      }
-    }
-
-    document.getElementById('btn-agendar').addEventListener('click', salvarAgendamento);
-    document.getElementById('btn-admin').addEventListener('click', entrarAdmin);
-    document.getElementById('btn-clear').addEventListener('click', limparTodos);
-  </script>
+<script>
+document.getElementById('btn').addEventListener('click', ()=>{alert('Agendamento salvo localmente! (Demo)')});
+document.querySelectorAll('.gallery img').forEach(img=>{
+  img.addEventListener('click', ()=>{
+    document.getElementById('modal-img').src = img.src;
+    document.getElementById('modal').style.display='block';
+  });
+});
+</script>
 </body>
 </html>
