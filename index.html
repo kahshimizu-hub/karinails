@@ -156,6 +156,7 @@
   </div>
 
 <script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlVEiK3LgjlaF6m6M_QPLJivoj7gFxxURokHjj4UAl2N9Qzf9VlsLyRDREi3nOkKHXYg/exec";
   const PIN = "0911";
   const MIN_LEAD_MIN = 120;
 
@@ -177,17 +178,37 @@
       alert('Precisa de 2h de antecedência / 2時間前までに予約してください'); return;
     }
 
-    const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]');
-    rows.push({nome,serv,data,hora,ts:Date.now()});
-    localStorage.setItem('agendamentos', JSON.stringify(rows));
+    // ENVIAR PARA A PLANILHA (Google Apps Script)
+fetch(WEB_APP_URL, {
+  method: 'POST',
+  mode: 'no-cors',                    // evita CORS; não precisamos ler a resposta
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ nome, servico: serv, data, hora, pin: PIN })
+})
+document.getElementById('btn-admin').addEventListener('click', async ()=>{
+  const pin = document.getElementById('pin').value.trim();
+  if (pin !== PIN) { alert('PIN incorreto / PINが違います'); return; }
 
-    const ok=document.getElementById('ok'); ok.style.display='block'; setTimeout(()=>ok.style.display='none',2500);
-  });
+  try {
+    const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
+    const data = await res.json();
+    if (!data.ok) { alert('Erro ao consultar.'); return; }
 
-  document.getElementById('btn-admin').addEventListener('click', ()=>{
-    const pin = document.getElementById('pin').value;
-    if(pin!==PIN){ alert('PIN incorreto / PINが違います'); return; }
-    const ul = document.getElementById('lista');
+    const ul   = document.getElementById('lista');
+    const area = document.getElementById('area-admin');
+
+    const rows = (data.rows || [])
+      .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+
+    ul.innerHTML = rows.length
+      ? rows.map(r=>`<li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>`).join('')
+      : '<li>(sem agendamentos)</li>';
+
+    area.style.display = 'block';
+  } catch (e) {
+    alert('Erro de rede ao consultar.');
+  }
+});
     const area = document.getElementById('area-admin');
     const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]')
       .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
