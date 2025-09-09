@@ -197,12 +197,19 @@ document.getElementById('btn').addEventListener('click', async ()=>{
 // ----------------- ADMIN -----------------
 document.getElementById('btn-admin').addEventListener('click', async ()=>{
   const pin = document.getElementById('pin').value.trim();
-  if (pin !== PIN) { alert('PIN incorreto / PINが違います'); return; }
+  if (pin !== PIN) { 
+    alert('PIN incorreto / PINが違います'); 
+    return; 
+  }
 
   try {
-    const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN));
+    const res = await fetch(WEB_APP_URL + '?pin=' + encodeURIComponent(PIN)); 
     const data = await res.json();
-    if (!data.ok) { alert('Erro ao consultar.'); return; }
+
+    if (!data.ok) { 
+      alert('Erro ao consultar.'); 
+      return; 
+    }
 
     const ul   = document.getElementById('lista');
     const area = document.getElementById('area-admin');
