@@ -6,21 +6,22 @@
   <title>Karinails.design | Agendamento</title>
   <style>
     body{font-family:sans-serif;background:#fff8f7;margin:0;color:#2d2a2a}
-    header{background:#ffeef7;padding:20px;text-align:center}
-    header img{width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+    header{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%);padding:24px;text-align:center}
+    header img{width:140px;height:140px;object-fit:cover;border-radius:50%;border:4px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.15)}
     .wrap{max-width:1000px;margin:auto;padding:20px}
     .grid{display:grid;gap:20px}
     @media(min-width:800px){.grid{grid-template-columns:1fr 1fr 1fr}}
     .card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-    .service{display:flex;justify-content:space-between;margin-bottom:16px}
+    .service{display:flex;justify-content:space-between;margin-bottom:18px} /* mais espaço entre serviços */
     .service h3{margin:0;font-size:15px}
     .yen{color:#d63384;font-weight:bold}
     .gallery{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
     @media(min-width:800px){.gallery{grid-template-columns:repeat(3,1fr)}}
     .gallery img{width:100%;border-radius:12px;object-fit:cover;aspect-ratio:1/1;cursor:pointer}
-    footer{background:#20181b;color:#fff;padding:14px;text-align:center;margin-top:20px}
+    footer{background:#20181b;color:#fff;padding:16px;text-align:center;margin-top:20px}
     footer a{color:#ffd1e6;text-decoration:none;margin:0 8px}
-    .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.8)}
+    /* Modal */
+    .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85)}
     .modal img{max-width:90%;max-height:90%;margin:auto;display:block;position:absolute;top:0;bottom:0;left:0;right:0}
   </style>
 </head>
@@ -44,9 +45,9 @@
 
       <div class="card">
         <h2>Agendar</h2>
-        <label>Nome <input id="nome"></label>
+        <label>Nome <input id="nome" style="width:100%"></label>
         <label>Serviço
-          <select id="servico">
+          <select id="servico" style="width:100%">
             <option>Esmaltadas em gel</option>
             <option>Alongamento + 1 cor</option>
             <option>Alongamento + decorações</option>
@@ -54,9 +55,9 @@
             <option>Acima de 28 dias</option>
           </select>
         </label>
-        <label>Data <input type="date" id="data"></label>
-        <label>Hora <input type="time" id="hora"></label>
-        <button id="btn">Agendar</button>
+        <label>Data <input type="date" id="data" style="width:100%"></label>
+        <label>Hora <input type="time" id="hora" style="width:100%"></label>
+        <button id="btn" style="width:100%;padding:10px;background:#d63384;color:#fff;border:none;border-radius:10px;font-weight:700">Agendar</button>
       </div>
 
       <div class="card">
@@ -72,7 +73,7 @@
 
   <footer>
     <p>© 2025 Karinails.design • Hiroshima</p>
-    <p><a href="https://instagram.com/karinails.design">@karinails.design</a> | 
+    <p>@ do Instagram: <a href="https://instagram.com/karinails.design">@karinails.design</a> | 
     <a href="https://wa.me/818057360208">WhatsApp</a></p>
   </footer>
 
