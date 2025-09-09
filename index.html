@@ -5,29 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Karinails.design | Agendamento</title>
   <style>
-    body{font-family:sans-serif;background:#fff8f7;margin:0;color:#2d2a2a}
-    header{background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%);padding:24px;text-align:center}
-    header img{width:140px;height:140px;object-fit:cover;border-radius:50%;border:4px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.15)}
-    .wrap{max-width:1000px;margin:auto;padding:20px}
+    :root{
+      --bg:#fff8f7; --card:#ffffff; --ink:#2d2a2a; --muted:#6f6366;
+      --pink:#ff5aa5; --pink-100:#ffe7f2; --pink-200:#ffd3e7; --pink-300:#ffb9d9;
+      --ring:rgba(255,90,165,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    header{
+      background:linear-gradient(120deg,#fff8f7 0%, #ffeef7 60%, #fff8f7 100%);
+      text-align:center;padding:26px 16px
+    }
+    header img{width:140px;height:140px;object-fit:cover;border-radius:50%;border:4px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+    h1{margin:10px 0 6px}
+    .wrap{max-width:1040px;margin:0 auto;padding:20px}
     .grid{display:grid;gap:20px}
-    @media(min-width:800px){.grid{grid-template-columns:1fr 1fr 1fr}}
-    .card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-    .service{display:flex;justify-content:space-between;margin-bottom:18px} /* mais espaço */
-    .service h3{margin:0;font-size:15px}
-    .yen{color:#d63384;font-weight:bold}
-    .muted{color:#6f6366;font-size:13px}
-    /* Galeria */
+    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr 1fr}}
+
+    .card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.07)}
+    .service{display:flex;justify-content:space-between;gap:8px;margin-bottom:18px}
+    .service h3{margin:0;font-size:15px;line-height:1.35}
+    .yen{color:var(--pink);font-weight:800}
+
+    /* ---- AGENDAR: rosinha com bordas redondas ---- */
+    .book{background:var(--pink-100)}
+    .book h2{margin-top:0}
+    label{display:block;margin:10px 0 6px;font-size:14px}
+    .input, .select{
+      width:100%;border:1.5px solid var(--pink-200);background:#fff;
+      padding:12px 14px;border-radius:14px;font-size:16px;outline:none;
+      transition:.15s border-color, .15s box-shadow;
+    }
+    .input:focus, .select:focus{border-color:var(--pink-300);box-shadow:0 0 0 5px var(--ring)}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > div{flex:1 1 180px}
+    .btn{
+      width:100%;padding:12px 16px;border:none;border-radius:14px;
+      background:var(--pink);color:#fff;font-weight:800;cursor:pointer;
+      box-shadow:0 8px 18px rgba(255,90,165,.25)
+    }
+    .btn:hover{filter:brightness(.98)}
+
+    .muted{color:var(--muted);font-size:13px}
+    .ok{display:none;margin-bottom:10px;background:#eafff1;border:1px solid #b6f3c8;color:#176d3a;padding:10px;border-radius:12px}
+
+    /* Galeria + lightbox */
     .gallery{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
-    @media(min-width:800px){.gallery{grid-template-columns:repeat(3,1fr)}}
-    .gallery img{width:100%;border-radius:12px;object-fit:cover;aspect-ratio:1/1;cursor:pointer}
-    /* Rodapé */
-    footer{background:#20181b;color:#fff;padding:16px;text-align:center;margin-top:20px}
-    footer a{color:#ffd1e6;text-decoration:none;margin:0 8px}
-    /* Modal (foto grande) */
-    .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85)}
-    .modal img{max-width:90%;max-height:90%;margin:auto;display:block;position:absolute;top:0;bottom:0;left:0;right:0;border-radius:12px}
-    /* Aviso sucesso */
-    .ok{display:none;margin-bottom:10px;background:#eafff1;border:1px solid #b6f3c8;color:#176d3a;padding:10px;border-radius:10px}
+    @media(min-width:900px){.gallery{grid-template-columns:repeat(3,1fr)}}
+    .gallery img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999}
+    .modal img{max-width:92vw;max-height:88vh;position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;border-radius:12px}
+
+    footer{background:#20181b;color:#fff;margin-top:24px}
+    footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:16px}
+    footer a{color:#ffd1e6;text-decoration:none}
+    .pill{background:#38262d;padding:8px 12px;border-radius:999px}
   </style>
 </head>
 <body>
@@ -50,42 +83,48 @@
         <p class="muted">* Valores em ienes.</p>
       </div>
 
-      <!-- Agendar + Admin (PIN) -->
-      <div class="card">
+      <!-- Agendar (rosinha) + Admin PIN -->
+      <div class="card book">
         <h2>Agendar / ご予約</h2>
         <div id="ok" class="ok">Agendamento salvo! / 予約完了しました。</div>
 
-        <label>Nome / お名前
-          <input id="nome" placeholder="Ex.: Karina / カリナ" style="width:100%">
-        </label>
+        <label>Nome / お名前</label>
+        <input id="nome" class="input" placeholder="Ex.: Karina / カリナ">
 
-        <label>Serviço / サービス
-          <select id="servico" style="width:100%">
-            <option>Esmaltadas em gel / ジェルネイルカラー</option>
-            <option>Alongamento + 1 cor / 長さ出し＋ワンカラー</option>
-            <option>Alongamento + decorações / 長さ出し＋デザイン＋ストーン</option>
-            <option>Manutenção (≤28 dias) / リペア（28日以内）</option>
-            <option>Acima de 28 dias / 28日以上</option>
-          </select>
-        </label>
+        <label>Serviço / サービス</label>
+        <select id="servico" class="select">
+          <option>Esmaltadas em gel / ジェルネイルカラー</option>
+          <option>Alongamento + 1 cor / 長さ出し＋ワンカラー</option>
+          <option>Alongamento + decorações / 長さ出し＋デザイン＋ストーン</option>
+          <option>Manutenção (≤28 dias) / リペア（28日以内）</option>
+          <option>Acima de 28 dias / 28日以上</option>
+        </select>
 
-        <label>Data / 日付 <input type="date" id="data" style="width:100%"></label>
-        <label>Hora / 時間 <input type="time" id="hora" style="width:100%"></label>
+        <div class="row">
+          <div>
+            <label>Data / 日付</label>
+            <input type="date" id="data" class="input">
+          </div>
+          <div>
+            <label>Hora / 時間</label>
+            <input type="time" id="hora" class="input">
+          </div>
+        </div>
 
-        <button id="btn" style="width:100%;padding:10px;background:#d63384;color:#fff;border:none;border-radius:10px;font-weight:700">
-          Agendar / 予約
-        </button>
+        <button id="btn" class="btn">Agendar / 予約</button>
 
-        <div style="margin-top:12px;border-top:1px dashed #ead1dd;padding-top:10px">
+        <!-- Admin PIN (igual ao antigo) -->
+        <div style="margin-top:14px;border-top:1px dashed #e7c9d7;padding-top:10px">
           <details>
             <summary>🔐 Admin (PIN)</summary>
-            <label>PIN <input type="password" id="pin" placeholder="**" style="width:100%"></label>
-            <button id="btn-admin" style="margin-top:8px;width:100%">Entrar</button>
+            <label>PIN</label>
+            <input type="password" id="pin" class="input" placeholder="**">
+            <button id="btn-admin" class="btn" style="margin-top:8px">Entrar</button>
 
             <div id="area-admin" style="display:none;margin-top:10px">
               <h3>Agendamentos</h3>
               <ul id="lista" class="muted" style="padding-left:18px"></ul>
-              <button id="btn-clear" style="background:#6b7280;color:#fff;border:none;border-radius:10px;padding:8px 10px">Limpar todos / 全削除</button>
+              <button id="btn-clear" class="btn" style="background:#6b7280">Limpar todos / 全削除</button>
             </div>
           </details>
           <div class="muted" style="font-size:12px">Fuso: Asia/Tokyo • データは端末（ブラウザ）に保存されます。</div>
@@ -105,35 +144,37 @@
   </main>
 
   <footer>
-    <p>© 2025 Karinails.design • Hiroshima</p>
-    <p>@ do Instagram: <a href="https://instagram.com/karinails.design" target="_blank">@karinails.design</a> |
-       <a href="https://wa.me/818057360208" target="_blank">WhatsApp</a></p>
+    <div class="wrap" style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">
+      <div>© 2025 Karinails.design • Hiroshima</div>
+      <div class="pill">@ do Instagram: <a href="https://instagram.com/karinails.design" target="_blank" style="margin-left:6px">@karinails.design</a></div>
+      <div class="pill"><a href="https://wa.me/818057360208" target="_blank">+81 80-5736-0208</a></div>
+    </div>
   </footer>
 
-  <!-- Modal da foto grande -->
+  <!-- Modal foto grande -->
   <div class="modal" id="modal" onclick="this.style.display='none'">
     <img id="modal-img" src="">
   </div>
 
 <script>
-  // ======= CONFIG =======
-  const PIN = "0911";              // <<-- seu PIN de admin (mude aqui se quiser)
-  const MIN_LEAD_MIN = 120;        // antecedência mínima: 2 horas
+  // ====== CONFIG ======
+  const PIN = "0911";            // mude aqui se quiser
+  const MIN_LEAD_MIN = 120;      // antecedência mínima 2h
 
-  // Data padrão = amanhã
+  // Data padrão: amanhã
   (function(){
     const d=new Date(); d.setDate(d.getDate()+1);
     const p=n=>String(n).padStart(2,'0');
     document.getElementById('data').value = d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());
   })();
 
-  // Salvar agendamento no navegador (localStorage)
+  // Salvar agendamento (localStorage)
   document.getElementById('btn').addEventListener('click', ()=>{
     const nome = document.getElementById('nome').value.trim();
-    const servico = document.getElementById('servico').value;
+    const serv = document.getElementById('servico').value;
     const data = document.getElementById('data').value;
     const hora = document.getElementById('hora').value;
-    if(!nome || !servico || !data || !hora){ alert('Preencha todos os campos / 全て入力してください'); return; }
+    if(!nome||!serv||!data||!hora){ alert('Preencha todos os campos / 全て入力してください'); return; }
 
     const when = new Date(data+'T'+hora+':00');
     if(when - new Date() < MIN_LEAD_MIN*60000){
@@ -141,29 +182,28 @@
     }
 
     const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]');
-    rows.push({nome, servico, data, hora, ts:Date.now()});
+    rows.push({nome,serv,data,hora,ts:Date.now()});
     localStorage.setItem('agendamentos', JSON.stringify(rows));
-    document.getElementById('ok').style.display='block';
-    setTimeout(()=>document.getElementById('ok').style.display='none', 2500);
+
+    const ok=document.getElementById('ok'); ok.style.display='block'; setTimeout(()=>ok.style.display='none',2500);
   });
 
-  // Admin: entrar com PIN e listar
+  // Admin
   document.getElementById('btn-admin').addEventListener('click', ()=>{
     const pin = document.getElementById('pin').value;
-    if(pin !== PIN){ alert('PIN incorreto / PINが違います'); return; }
-    const area = document.getElementById('area-admin');
+    if(pin!==PIN){ alert('PIN incorreto / PINが違います'); return; }
     const ul = document.getElementById('lista');
+    const area = document.getElementById('area-admin');
     const rows = JSON.parse(localStorage.getItem('agendamentos')||'[]')
-      .sort((a,b)=> (a.data+a.hora).localeCompare(b.data+b.hora));
-    ul.innerHTML = rows.length ? rows.map(r=>`<li>${r.data} ${r.hora} — ${r.nome} (${r.servico})</li>`).join('') : '<li>(vazio)</li>';
+      .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+    ul.innerHTML = rows.length ? rows.map(r=>`<li>${r.data} ${r.hora} — ${r.nome} (${r.serv})</li>`).join('') : '<li>(vazio)</li>';
     area.style.display='block';
   });
 
-  // Limpar
   document.getElementById('btn-clear').addEventListener('click', ()=>{
     if(confirm('Apagar todos os agendamentos? / 全て削除しますか？')){
       localStorage.removeItem('agendamentos');
-      document.getElementById('lista').innerHTML = '<li>(vazio)</li>';
+      document.getElementById('lista').innerHTML='<li>(vazio)</li>';
     }
   });
 
